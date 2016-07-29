@@ -76,12 +76,12 @@ static PedExceptionOption pedExceptionHandler(PedException* e)
 #if defined LIBPARTED_FS_RESIZE_LIBRARY_SUPPORT
 static qint64 readSectorsUsedLibParted(const Partition& p)
 {
-    QVariantMap args;
-    args[QLatin1String("deviceNode")] = p.deviceNode();
-    args[QLatin1String("firstSector")] = p.firstSector();
-
     KAuth::Action action = QStringLiteral("org.kde.kpmcore.scan.readsectorsused");
     action.setHelperId(QStringLiteral("org.kde.kpmcore.scan"));
+    QVariantMap args = {
+        { QStringLiteral("deviceNode"), p.deviceNode() },
+        { QStringLiteral("firstSector"), p.firstSector() }
+    };
     action.setArguments(args);
     KAuth::ExecuteJob *job = action.execute();
     if (!job->exec()) {
@@ -147,11 +147,9 @@ void LibPartedBackend::initFSSupport()
 */
 Device* LibPartedBackend::scanDevice(const QString& deviceNode)
 {
-    QVariantMap args;
-    args[QLatin1String("deviceNode")] = deviceNode;
-
     KAuth::Action scanAction = QStringLiteral("org.kde.kpmcore.scan.scandevice");
     scanAction.setHelperId(QStringLiteral("org.kde.kpmcore.scan"));
+    QVariantMap args = {{ QStringLiteral("deviceNode"), deviceNode }};
     scanAction.setArguments(args);
     KAuth::ExecuteJob *job = scanAction.execute();
     if (!job->exec()) {
@@ -365,12 +363,11 @@ FileSystem::Type LibPartedBackend::detectFileSystem(const QString& deviceNode)
 {
     FileSystem::Type rval = FileSystem::Unknown;
 
-    QVariantMap args;
-    args[QLatin1String("deviceNode")] = deviceNode;
-
     KAuth::Action action = QStringLiteral("org.kde.kpmcore.scan.detectfilesystem");
     action.setHelperId(QStringLiteral("org.kde.kpmcore.scan"));
+    QVariantMap args = {{ QStringLiteral("deviceNode"), deviceNode }};
     action.setArguments(args);
+
     KAuth::ExecuteJob *job = action.execute();
     if (!job->exec()) {
         qWarning() << "KAuth returned an error code: " << job->errorString();
