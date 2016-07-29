@@ -19,6 +19,7 @@ set(CORE_SRC
     core/diskdevice.cpp
     core/volumemanagerdevice.cpp
     core/lvmdevice.cpp
+    core/mddevice.cpp
     core/operationstack.cpp
     core/partitionrole.cpp
 )
@@ -32,6 +33,7 @@ set(CORE_LIB_HDRS
     core/diskdevice.h
     core/volumemanagerdevice.h
     core/lvmdevice.h
+    core/mddevice.h
     core/devicescanner.h
     core/mountentry.h
     core/operationrunner.h

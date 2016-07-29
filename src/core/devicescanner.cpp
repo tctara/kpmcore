@@ -24,6 +24,7 @@
 #include "core/operationstack.h"
 #include "core/device.h"
 #include "core/lvmdevice.h"
+#include "core/mddevice.h"
 #include "core/diskdevice.h"
 
 #include "util/externalcommand.h"
@@ -64,11 +65,15 @@ void DeviceScanner::scan()
 
     QList<Device*> deviceList = CoreBackendManager::self()->backend()->scanDevices();
     QList<LvmDevice*> lvmList = LvmDevice::scanSystemLVM();
+    QList<MdDevice*> mdList   = MdDevice::scanSystemMD();
 
     foreach(Device * d, deviceList)
         operationStack().addDevice(d);
 
     foreach(Device * d, lvmList)
+        operationStack().addDevice(d);
+
+    foreach(Device* d, mdList)
         operationStack().addDevice(d);
 
     operationStack().sortDevices();
